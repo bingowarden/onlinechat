@@ -1,0 +1,59 @@
+﻿<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>客服页面</title>
+		<script src="/socket.io/socket.io.js"></script>
+	</head>
+	<style>
+		p{
+			margin:0px;
+			padding:0px;
+		}
+	</style>
+	<body>
+	<script type="text/javascript">
+		function $(id){
+			return document.getElementById(id);
+		}
+		function appMsg(msg){
+			$('info').innerHTML = $('info').innerHTML + '<p>'+msg+'</p>';
+		}
+		onload = function(){
+			var socket = io.connect(null);
+			socket.on('connect',function(){
+				appMsg('已连接');
+			});
+			socket.on('userConnect',function(msg){
+				appMsg(msg);
+			});
+			socket.on('userleave',function(msg){
+				appMsg(msg);
+				socket.emit('userleave');
+			});
+			socket.on('getusermsg',function(msg){
+				var date = new Date();
+				var time = [date.getHours(),date.getMinutes(),date.getSeconds()]
+				appMsg('用户:'+msg+time.join(':'));
+			});
+			$('send').onclick = function(){
+				var date = new Date();
+				var time = [date.getHours(),date.getMinutes(),date.getSeconds()]
+				var msg = $('content').value;
+				appMsg('我:'+msg+time.join(':'));
+				socket.emit('sendkefumsg',msg);
+				$('content').value = '';
+				$('info').scrollTop = 1000000
+			}
+			$('clear').onclick = function(){
+				$('info').innerHTML = '';
+			}
+		}
+	</script>
+	<div id="info" style="height:300px;overflow:auto;">
+	
+	</div>
+	<input type="text" id="content" />
+	<input type="button" id="send" value="发送"/>
+	<input type="button" id="clear" value="清空" />
+	</body>
+</html>

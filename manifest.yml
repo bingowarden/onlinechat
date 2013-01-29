@@ -1,0 +1,16 @@
+--- 
+applications: 
+  .: 
+    mem: 64M
+    instances: 2
+    name: onlineserverchat
+    services: 
+      onLinChatServerDB: 
+        type: mongodb
+    url: onlineserverchat.aws.af.cm
+    framework: 
+      info: 
+        mem: 64M
+        description: Node.js Application
+        exec: 
+      name: node
