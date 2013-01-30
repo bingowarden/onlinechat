@@ -35,7 +35,7 @@
 			socket.on('getkefumsg',function(msg){
 				var date = new Date();
 				var time = [date.getHours(),date.getMinutes(),date.getSeconds()]
-				appMsg('客服:'+msg+time.join(':'));
+				appMsg('客服:'+msg+'     '+time.join(':'));
 			});
 			$('send').onclick = function(){
 				var date = new Date();
@@ -46,6 +46,18 @@
 				$('content').value = '';
 				$('info').scrollTop = 1000000
 			}
+            $('content').onkeydown = function(ev){
+                ev = ev || window.event;
+                if(ev.keyCode==30){
+                    var date = new Date();
+                    var time = [date.getHours(),date.getMinutes(),date.getSeconds()]
+                    var msg = $('content').value;
+                    appMsg('我:'+msg+'     '+time.join(':'));
+                    socket.emit('sendusermsg',msg);
+                    $('content').value = '';
+                    $('info').scrollTop = 1000000
+                }
+            }
 			$('clear').onclick = function(){
 				$('info').innerHTML = '';
 			}
